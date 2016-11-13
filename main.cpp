@@ -82,11 +82,55 @@ int main()
                 case 'A' :
                     if (plrY > 1)   // if 1 we are against the wall.
                     {
-                        if (map[plrX][plrY-1] == 0 || map[plrX][plrY-1] == 1 || map[plrX][plrY-1] == 2)
+                        if (map[plrX][plrY-1] == 0)
                         {
                             map[plrX][plrY] = 0;  // clear existing spot
                             map[plrX][plrY - 1] = 3; // new position.
                             plrY--;
+                        }
+                        else if(map[plrX][plrY-1] == 1)
+                        {
+                            char item;
+                            cout << "There is an item on the ground would you like to pick it up? Y/N";
+                            cin >> item;
+                            item = toupper(item);
+                            switch(item){
+                                case 'Y':
+                                    cout << "you picked up an item";
+                                    map[plrX][plrY] = 0;  // clear existing spot
+                                    map[plrX][plrY-1] = 0;  // clear enemy spot
+                                    map[plrX][plrY-1] = 3; //new position.
+                                    plrY--;
+                                    break;
+                                case 'N':
+                                    map[plrX][plrY] = 0;  // clear existing spot
+                                    map[plrX][plrY-1] = 3; //new position.
+                                    plrY--;
+                                    break;
+                            }
+                        }
+                        else if(map[plrX][plrY-1] == 2)
+                        {
+                          char fight;
+                          cout << "There is an enemy ahead would you like to fight it? Y/N";
+                          cin >> fight;
+                          fight = toupper(fight);
+                          switch(fight){
+                              case 'Y':
+                                  char win;
+                                  cout << "Debug did you win? Y/N";
+                                  cin >> win;
+                                  win = toupper(win);
+                                  if(win = 'Y'){
+                                         map[plrX][plrY] = 0;  // clear existing spot
+                                         map[plrX][plrY - 1] = 0;  // clear enemy spot
+                                         map[plrX][plrY - 1] = 3; //new position.
+                                         plrY--;
+                                  }
+                                  break;
+                             case 'N':
+                                  break;
+                          }
                         }
                     }
                 break;
@@ -94,23 +138,111 @@ int main()
                 case 'D' :
                 	if (plrY < Rows-1)   // if 9 we are against the wall.
                 {
-                    if (map[plrX][plrY + 1] == 0 || map[plrX][plrY+1] == 1 || map[plrX][plrY+1] == 2)
+                    if (map[plrX][plrY + 1] == 0)
                     {
                         map[plrX][plrY] = 0;  // clear existing spot
                         map[plrX][plrY + 1] = 3; // new position.
                         plrY++;
                     }
+                        else if(map[plrX][plrY+1] == 1)
+                        {
+                            char item;
+                            cout << "There is an item on the ground would you like to pick it up? Y/N";
+                            cin >> item;
+                            item = toupper(item);
+                            switch(item){
+                                case 'Y':
+                                    cout << "you picked up an item";
+                                    map[plrX][plrY] = 0;  // clear existing spot
+                                    map[plrX][plrY+1] = 0;  // clear enemy spot
+                                    map[plrX][plrY+1] = 3; //new position.
+                                    plrY++;
+                                    break;
+                                case 'N':
+                                    map[plrX][plrY] = 0;  // clear existing spot
+                                    map[plrX][plrY+1] = 3; //new position.
+                                    plrY++;
+                                    break;
+                            }
+                        }
+                        else if(map[plrX][plrY+1] == 2)
+                        {
+                          char fight;
+                          cout << "There is an enemy ahead would you like to fight it? Y/N";
+                          cin >> fight;
+                          fight = toupper(fight);
+                          switch(fight){
+                              case 'Y':
+                                  char win;
+                                  cout << "Debug did you win? Y/N";
+                                  cin >> win;
+                                  win = toupper(win);
+                                  if(win = 'Y'){
+                                         map[plrX][plrY] = 0;  // clear existing spot
+                                         map[plrX][plrY + 1] = 0;  // clear enemy spot
+                                         map[plrX][plrY + 1] = 3; //new position.
+                                         plrY++;
+                                  }
+                                  break;
+                             case 'N':
+                                  break;
+                          }
+                        }
                 }
                 break;
                 // up
                 case 'W' :
                     if (plrX > 1)   // if 1 we are against the wall.
                     {
-                        if (map[plrX-1][plrY] == 0 || map[plrX-1][plrY] == 1 || map[plrX-1][plrY] == 2)
+                        if (map[plrX-1][plrY] == 0)
                         {
                             map[plrX][plrY] = 0;  // clear existing spot
                             map[plrX-1][plrY] = 3; // new position.
                             plrX--;
+                        }
+                        else if(map[plrX-1][plrY] == 1)
+                        {
+                            char item;
+                            cout << "There is an item on the ground would you like to pick it up? Y/N";
+                            cin >> item;
+                            item = toupper(item);
+                            switch(item){
+                                case 'Y':
+                                    cout << "you picked up an item";
+                                    map[plrX][plrY] = 0;  // clear existing spot
+                                    map[plrX-1][plrY] = 0;  // clear enemy spot
+                                    map[plrX-1][plrY] = 3; //new position.
+                                    plrX--;
+                                    break;
+                                case 'N':
+                                    map[plrX-1][plrY] = 0;  // clear existing spot
+                                    map[plrX-1][plrY] = 3; //new position.
+                                    plrX--;
+                                    break;
+                            }
+                        }
+                        else if(map[plrX-1][plrY] == 2)
+                        {
+                          char fight;
+                          cout << "There is an enemy ahead would you like to fight it? Y/N";
+                          cin >> fight;
+                          fight = toupper(fight);
+                          switch(fight){
+                              case 'Y':
+                                  char win;
+                                  cout << "Debug did you win? Y/N";
+                                  cin >> win;
+                                  win = toupper(win);
+                                  if(win = 'Y'){
+                                         map[plrX][plrY] = 0;  // clear existing spot
+                                         map[plrX -1][plrY] = 0;  // clear enemy spot
+                                         map[plrX -1][plrY] = 3; //new position.
+                                         plrX--;
+                                  }
+                                  break;
+                             case 'N':
+                                  break;
+                          }
                         }
                     }
                 break;
@@ -118,11 +250,55 @@ int main()
                 case 'S' :
                     if (plrX < Cols-1)   // if 9 we are against the wall.
                     {
-                        if (map[plrX + 1][plrY] == 0 || map[plrX][plrY+1] == 1 || map[plrX][plrY+1] == 2)
+                        if (map[plrX + 1][plrY] == 0)
                         {
                             map[plrX][plrY] = 0;  // clear existing spot
                             map[plrX + 1][plrY] = 3; // new position.
                             plrX++;
+                        }
+                        else if(map[plrX+1][plrY] == 1)
+                        {
+                            char item;
+                            cout << "There is an item on the ground would you like to pick it up? Y/N";
+                            cin >> item;
+                            item = toupper(item);
+							switch(item){
+							    case 'Y':
+									cout << "you picked up an item";
+                                    map[plrX][plrY] = 0;  // clear existing spot
+									map[plrX+1][plrY] = 0;  // clear enemy spot
+                                    map[plrX+1][plrY] = 3; //new position.
+                                    plrX++;
+									break;
+								case 'N':
+                                    map[plrX][plrY] = 0;  // clear existing spot
+                                    map[plrX+1][plrY] = 3; //new position.
+                                    plrX++;
+									break;
+							}
+                        }
+                        else if(map[plrX+1][plrY] == 2)
+                        {
+                          char fight;
+                          cout << "There is an enemy ahead would you like to fight it? Y/N";
+                          cin >> fight;
+                          fight = toupper(fight);
+                          switch(fight){
+                              case 'Y':
+                                  char win;
+                                  cout << "Debug did you win? Y/N";
+                                  cin >> win;
+                                  win = toupper(win);
+                                  if(win = 'Y'){
+                                         map[plrX][plrY] = 0;  // clear existing spot
+                                         map[plrX+1][plrY] = 0;  // clear enemy spot
+                                         map[plrX+1][plrY] = 3; //new position.
+                                         plrX++;
+                                  }
+                                  break;
+                             case 'N':
+                                  break;
+                          }
                         }
                     }
                 break;
