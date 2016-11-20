@@ -12,6 +12,8 @@
 #include <vector>
 //vector<vector<int> > map;
 #include "board.h"
+#include "fanGame.h"
+#include "character.h"
 using namespace std;
 
 int main()
@@ -27,68 +29,33 @@ int main()
     cout << "Please enter the number of colunms:";
     cin >> Cols;
     Cols = Cols +2;
-    board newBoard(Rows,Cols);
+    //board newBoard(Rows,Cols);
+    FantasyGame newFantasyGame(Rows,Cols);
+	bool GameOver = false;
     do
     {
-        newBoard.displayBoard(Rows,Cols);
         // read the move
+        newFantasyGame.PrintBoard(Rows,Cols);
         cout << "Enter a move using (W=up,A=left,S=down,D=Right):";
         cin >> move;
         move = toupper(move);
-
-        switch (move)
-        {
-            // left
-                case 'A' :
-                    if (plrY > 1)   // if 1 we are against the wall.
-                    {
-                        if (board::map[plrX][plrY-1] == 0 || board::map[plrX][plrY-1] == 1 || board::map[plrX][plrY-1] == 2)
-                        {
-                            board::map[plrX][plrY] = 0;  // clear existing spot
-                            board::map[plrX][plrY - 1] = 3; // new position.
-                            plrY--;
-                        }
-                    }
-                break;
-                // right
-                case 'D' :
-                	if (plrY < Rows-1)   // if 9 we are against the wall.
-                {
-                    if (board::map[plrX][plrY + 1] == 0 || board::map[plrX][plrY+1] == 1 || board::map[plrX][plrY+1] == 2)
-                    {
-                        board::map[plrX][plrY] = 0;  // clear existing spot
-                        board::map[plrX][plrY + 1] = 3; // new position.
-                        plrY++;
-                    }
+        system("clear");
+        if(newFantasyGame.MovePlayer(move)){
+            //If the Player is dead
+            if(newFantasyGame.PlayerIsDead()){
+               cout << "You have Died!" << endl;
+               GameOver = true;
+            } else {
+                // Remove all dead Foes from game
+                newFantasyGame.RemoveDeadFoes();
+                // If all of the Foes are dead
+                if (newFantasyGame.AllFoesDead()) {
+                    cout << "Map Clear!" << endl;
+                    GameOver = true;
                 }
-                break;
-                // up
-                case 'W' :
-                    if (plrX > 1)   // if 1 we are against the wall.
-                    {
-                        if (board::map[plrX-1][plrY] == 0 || board::map[plrX-1][plrY] == 1 || board::map[plrX-1][plrY] == 2)
-                        {
-                            board::map[plrX][plrY] = 0;  // clear existing spot
-                            board::map[plrX-1][plrY] = 3; // new position.
-                            plrX--;
-                        }
-                    }
-                break;
-                // down
-                case 'S' :
-                    if (plrX < Cols-1)   // if 9 we are against the wall.
-                    {
-                        if (board::map[plrX + 1][plrY] == 0 || board::map[plrX+1][plrY] == 1 || board::map[plrX+1][plrY] == 2)
-                        {
-                            board::map[plrX][plrY] = 0;  // clear existing spot
-                            board::map[plrX + 1][plrY] = 3; // new position.
-                            plrX++;
-                        }
-                    }
-                break;
+            }
         }
-
-    } while (move != 'Q');
+    } while (!GameOver);
     return 0;
 
 	}

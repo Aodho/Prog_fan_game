@@ -22,7 +22,8 @@ static vector< vector<int> > map;
 
 board(int rows,int cols);
 //initialise board class
-void displayBoard(int rows, int cols);
+
+//void displayBoard(int rows, int cols);
 
 private:
 int Rows;

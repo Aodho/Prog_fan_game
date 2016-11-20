@@ -24,7 +24,8 @@ board::board(int Rows, int Cols)
     for (int i = 0; i < Rows; i++){
         map[i].resize(Cols);
         for (int j = 0; j < Cols; j++){
-            int value = (rand() % 3);
+            //int value = (rand() % 3);
+            int value = 0;
             // add in random values between 0-2.
             // 0 for empty space, 1 for enemy, and 2 for item
             map[i][j] = value;
@@ -42,35 +43,4 @@ board::board(int Rows, int Cols)
          //add in 5 for walls to top and bottum of matrix
          map[Rows-1][j] = 5;
         };
-    map[1][1] = 3;
-    //add in player at postiton (1,1)
-}
-
-void board::displayBoard(int Rows, int Cols)
-{
-	system("clear");
-	// display the map, just a simple loop
-	for (int down = 0; down < Rows; down++) {
-		for (int across = 0; across < Cols; across++) {
-			switch (board::map[down][across])
-			{
-				case 0:  // Nothing
-					cout << "X";
-				break;
-				case 1:  // item
-					cout << "$";
-				break;
-				case 2: //Enemy
-					cout << "£";
-				break;
-				case 3: //player
-					cout << "@";
-				break;
-				case 5:  // wall
-					cout << "#";
-				break;
-			}
-		}
-		cout << endl;
-	}
 }
