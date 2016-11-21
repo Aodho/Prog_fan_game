@@ -9,6 +9,7 @@
 #include "fanGame.h"
 using namespace std;
 
+vector< vector<character*> > FantasyGame::CharacterLocation(10,vector<character*>(10));
 //board newBoard(int rows, int cols);
 FantasyGame::FantasyGame(int rows,int cols) {
 	// Initlialize the random number generator
@@ -16,6 +17,10 @@ FantasyGame::FantasyGame(int rows,int cols) {
 	time(&qTime);
 	srand((unsigned int)qTime);
 	board newBoard(rows, cols);
+    CharacterLocation.resize(rows);
+    for (int i = 0; i < rows; i++){
+        CharacterLocation[i].resize(cols);
+    }
         for (unsigned int Row = 0; Row < 10; ++Row) {
             for (unsigned int Col = 0; Col < 10; ++Col) {
                 CharacterLocation[Row][Col]    = 0;

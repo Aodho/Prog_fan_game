@@ -29,8 +29,8 @@ int main()
     cout << "Please enter the number of colunms:";
     cin >> Cols;
     Cols = Cols +2;
-    //board newBoard(Rows,Cols);
     FantasyGame newFantasyGame(Rows,Cols);
+    system("clear");
 	bool GameOver = false;
     do
     {

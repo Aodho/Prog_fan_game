@@ -40,7 +40,7 @@ private:
     board newBoard(int rows, int cols);
     character Player;
     character Enemies[20];
-    character* CharacterLocation[50][50];
+    static vector<vector<character*> > CharacterLocation;
 };
 
 #endif
