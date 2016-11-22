@@ -15,26 +15,26 @@
 using namespace std;
 
 //vector< vector<int> > map;
-//used to generate a matrix
+//used to initialise a blank empty 10x10 matrix
 vector< vector<int> > board::map(10,vector<int>(10));
 
 board::board(int Rows, int Cols)
 {
+    //used to resize the initialised matrix to the correct number of rows
     map.resize(Rows);
     for (int i = 0; i < Rows; i++){
+        //used to resize the initialised matrix to the correct number of colunms
         map[i].resize(Cols);
         for (int j = 0; j < Cols; j++){
-            //int value = (rand() % 3);
             int value = 0;
-            // add in random values between 0-2.
-            // 0 for empty space, 1 for enemy, and 2 for item
+            // setting all values in the matrix to 0 as 0 is empty space
             map[i][j] = value;
         };
     };
 
     for (int i = 0; i < Rows; i++){
          map[i][0] = 5;
-         //add in 5 for walls to both sides of the matrix
+         //add in 5 for walls to both left and right side of the matrix
          map[i][Cols-1] = 5;
         };
 

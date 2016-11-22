@@ -19,26 +19,34 @@ using namespace std;
 int main()
 {
 	try{
-
     char move;
-    int plrX = 1, plrY = 1; // player start point
     unsigned int Rows,Cols;
+
+    //takes in number of rows of the board
     cout << "Please enter the number of rows:";
     cin >> Rows;
     Rows = Rows + 2;
+
+    //takes in the number of colums of the board
     cout << "Please enter the number of colunms:";
     cin >> Cols;
     Cols = Cols +2;
+
+    //generates the game and board
     FantasyGame newFantasyGame(Rows,Cols);
     system("clear");
+    
+    //sets the gameover to be false
 	bool GameOver = false;
     do
     {
+        newBoard.displayBoard(Rows,Cols);
         // read the move
         newFantasyGame.PrintBoard(Rows,Cols);
         cout << "Enter a move using (W=up,A=left,S=down,D=Right):";
         cin >> move;
         move = toupper(move);
+
         system("clear");
         if(newFantasyGame.MovePlayer(move)){
             //If the Player is dead

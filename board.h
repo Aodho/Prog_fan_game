@@ -11,19 +11,15 @@
 #include "board.h"
 using namespace std;
 
-//extern vector< vector<int> > map;
-//initialize external vector of vectors map
-
 class board
 {
 public:
 
+//public matrix editable from anywhere in the program
 static vector< vector<int> > map;
 
 board(int rows,int cols);
 //initialise board class
-
-//void displayBoard(int rows, int cols);
 
 private:
 int Rows;

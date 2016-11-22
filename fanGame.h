@@ -20,26 +20,31 @@ using namespace std;
 class FantasyGame
 {
 public:
-
+    //create a new game
     FantasyGame(int rows, int cols);
-
+    //find out character or item location
     int QueryLocation(unsigned int Rows, unsigned int Cols);
-
+    //Move the player around the board
     bool MovePlayer(const char Movement);
-
+    //print the board
     void PrintBoard(int rows, int cols);
-
+    //check if the player is alive if not end game
     bool PlayerIsDead();
-
+    //remove dead enemies from the board
     void RemoveDeadFoes();
-
+    //end game if all foes dead
     bool AllFoesDead();
 
 private:
+    //locate a character
     bool LocateCharacter(unsigned int& rRow, unsigned int& cCol, character* xyCharacter);
+    //createa new board
     board newBoard(int rows, int cols);
+    // create a player character
     character Player;
+    //create enemy characters
     character Enemies[20];
+    //create a matrix of character locations
     static vector<vector<character*> > CharacterLocation;
 };
 
