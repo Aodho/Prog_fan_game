@@ -40,10 +40,10 @@ int main()
 	bool GameOver = false;
     do
     {
-        newBoard.displayBoard(Rows,Cols);
         // read the move
         newFantasyGame.PrintBoard(Rows,Cols);
-        cout << "Enter a move using (W=up,A=left,S=down,D=Right):";
+        cout << "Enter a move using (W=up,A=left,S=down,D=Right)\n";
+        cout << "Other actions(P=pick up item,I = check inventory,O = Drop Item):";
         cin >> move;
         move = toupper(move);
 

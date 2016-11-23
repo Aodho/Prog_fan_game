@@ -15,6 +15,8 @@
 #include <vector>
 #include "board.h"
 #include "character.h"
+#include "item.h"
+#include <map>
 using namespace std;
 
 class FantasyGame
@@ -34,18 +36,31 @@ public:
     void RemoveDeadFoes();
     //end game if all foes dead
     bool AllFoesDead();
+    static vector<item> inventory;
+    int CheckItem(unsigned int x);
 
 private:
     //locate a character
     bool LocateCharacter(unsigned int& rRow, unsigned int& cCol, character* xyCharacter);
+
+
     //createa new board
     board newBoard(int rows, int cols);
     // create a player character
     character Player;
     //create enemy characters
     character Enemies[20];
+    charcter temp = character(1);
+    Enemies[0]= temp;
+
+    // should use two d arrys to store both above and below
+    //create items
+    item Items[20];
     //create a matrix of character locations
     static vector<vector<character*> > CharacterLocation;
+    //create a matrix of item locations
+    static vector<vector<item*> > ItemLocation;
+    //static map<int,item> pickedUpItems;
 };
 
 #endif

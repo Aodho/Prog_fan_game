@@ -7,10 +7,16 @@
 #include "character.h"
 #include "board.h"
 #include "fanGame.h"
+#include "item.h"
+#include <map>
 using namespace std;
 
 vector< vector<character*> > FantasyGame::CharacterLocation(10,vector<character*>(10));
 //initialise a matrix of character locations
+vector< vector<item*> > FantasyGame::ItemLocation(10,vector<item*>(10));
+//initialise a matrix of item locations
+vector<item> FantasyGame::inventory(0);
+//map<int,item> pickedUpItems;
 
 FantasyGame::FantasyGame(int rows,int cols) {
 	// Initlialize the random number generator
@@ -25,12 +31,24 @@ FantasyGame::FantasyGame(int rows,int cols) {
         //used to resize the initialised matrix to the correct number of colunms
         CharacterLocation[i].resize(cols);
     }
+    ItemLocation.resize(rows);
+    for (int i = 0; i < rows; i++){
+        //used to resize the initialised matrix to the correct number of colunms
+        ItemLocation[i].resize(cols);
+    }
     // setting all values in the matrix to 0 as 0 is empty space
     for (unsigned int Row = 0; Row < 10; ++Row) {
         for (unsigned int Col = 0; Col < 10; ++Col) {
             CharacterLocation[Row][Col]    = 0;
         }
     }
+    // setting all values in the matrix to 0 as 0 is empty space
+    for (unsigned int Row = 0; Row < 10; ++Row) {
+        for (unsigned int Col = 0; Col < 10; ++Col) {
+            ItemLocation[Row][Col]    = 0;
+        }
+    }
+    inventory.clear();
 
     bool startPos = false;
 	while (!startPos) {
@@ -57,6 +75,22 @@ FantasyGame::FantasyGame(int rows,int cols) {
 			}
 	    }
 	}
+	//Create 10 Items
+	bool genItems = false;
+    unsigned int item = 17;
+    while (!genItems) {
+        unsigned int Row = 2 + (rand() % (rows - 2));
+        unsigned int Col = 2 + (rand() % (cols - 2));
+        //randomly generating 10 items needs to be updated
+        if (QueryLocation(Row, Col) == 0) {
+            ItemLocation[Row][Col] = &Items[item];
+            ++item;
+            if (item == 27) {
+                genItems = true;
+            }
+        }
+    }
+
 }
 //Used to find out wether an enemy,player or blank space is at each location
 int FantasyGame::QueryLocation(unsigned int Row, unsigned int Col) {
@@ -66,6 +100,11 @@ int FantasyGame::QueryLocation(unsigned int Row, unsigned int Col) {
             return i;
         }
     }
+	for (unsigned int j = 17; j < 27; ++j) {
+		if (ItemLocation[Row][Col] == &(Items[j])) {
+            return j;
+        }
+	}
     //if player location return 3
     if (CharacterLocation[Row][Col] == &Player) {
          return 3;
@@ -74,6 +113,7 @@ int FantasyGame::QueryLocation(unsigned int Row, unsigned int Col) {
         return board::map[Row][Col];
     }
 }
+
 //this needs to be updated so it doesn't have a hardcoded 20 rather the correct rows and cols
 bool FantasyGame::LocateCharacter(unsigned int& rRow, unsigned int& cCol,character* xyCharacter) {
 	for (unsigned int Row = 0; Row < 20; ++Row) {
@@ -95,33 +135,81 @@ bool FantasyGame::MovePlayer(const char Movement) {
     //locates the player and sets up a temporary location
 	unsigned int NextRow = PlayerRow;
 	unsigned int NextCol = PlayerCol;
+    int CurLoc = QueryLocation(NextRow, NextCol);
     //uses a switch statement to move
     //Moves by taking and adding to the row and col
 	switch (Movement) {
-        case 'w':
 		case 'W':
 			{
 				--NextRow;
 				break;
 			}
-        case 'd':  
 		case 'D':
 			{
 				++NextCol;
 				break;
 			}
-        case 's':
 		case 'S':
 			{
 				++NextRow;
 				break;
 			}
-        case 'a':
 		case 'A':
 			{
 				--NextCol;
 				break;
 			}
+        case 'P':
+            {
+                if (CurLoc >= 17 && CurLoc <= 27){
+                    //pickedUpItems[CurLoc] = (Items[CurLoc - 17]);
+                    //cout << pickedUpItems;
+                    inventory.push_back(Items[CurLoc - 17]);
+                    ItemLocation[PlayerRow][PlayerCol] = 0;
+                    return true;
+               }else{
+                    return false;
+               }
+                break;
+            }
+        case 'O':
+            {
+                if (inventory.size() > 0){
+                    cout << "INVENTORY: \n";
+                    for (int j = 0;j<inventory.size(); ++j){
+                       cout << j << "). " << inventory[j].name << "," << "\n";
+                    }
+                    if(CurLoc == 3){
+						unsigned int x;
+                        cout << "Please enter Item number from inventory list";
+						cin >> x;
+                        //item thing = inventory[x];
+                        //ItemLocation[PlayerRow][PlayerCol] = CheckItem(x);
+						inventory.erase(inventory.begin() + x);
+                    }
+                    else{
+                        cout << "Unable to drop item as space is not free!";
+                    }
+                }
+                else{
+                    cout << "Nothing Present in inventory";
+                }
+             break;
+            }
+        case 'I':
+            {
+                cout << "INVENTORY: \n";
+                if (inventory.size() > 0){
+                    for (int j = 0;j<inventory.size(); ++j){
+                       cout << j << "). " << inventory[j].name << "," << "\n";
+                    }
+                }
+                else{
+                    cout << "Nothing in inventory" << "\n";
+                }
+                return true;
+                break;
+            }
 		default:
 			{
 				return false;
@@ -135,7 +223,11 @@ bool FantasyGame::MovePlayer(const char Movement) {
 		CharacterLocation[PlayerRow][PlayerCol] = 0;
 		return true;
     //if an enemy player will attack that enemy
-	} else if (NextLoc >= 6 && NextLoc <= 16) {
+	}else if (NextLoc >= 17 && NextLoc <= 27){ 
+		CharacterLocation[NextRow][NextCol] = &Player;
+		CharacterLocation[PlayerRow][PlayerCol] = 0;
+		return true;
+	}else if (NextLoc >= 6 && NextLoc <= 16) {
 		Player.Attack(Enemies[NextLoc]);
 		return true;
      //if not enemy or player returns false as it is a wall
@@ -180,11 +272,11 @@ for (int down = 0; down < Rows; down++) {
 			case 0:  // Nothing
 				cout << " ";
 			break;
-			case 1:  // item
+			case 17 ... 27:  // item
 				cout << "$";
 			break;
 			case 6 ... 16: //Enemy
-				cout << "E";
+				cout << "I";
 			break;
 			case 3: //player
 				cout << "P";

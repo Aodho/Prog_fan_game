@@ -8,7 +8,7 @@
 using namespace std;
 
 //character class used to generate characters
-character::character() : chanceAttack(0), chanceDefense(0), baseHealth(0), CharAttack(0), CharDefense(0)
+character::character() : chanceAttack(0), chanceDefense(0), baseHealth(0), CharAttack(0), CharDefense(0), strength(0)
 {
     //character chance of attack
 	chanceAttack = chanceAttack + (rand() % 33);
@@ -20,6 +20,8 @@ character::character() : chanceAttack(0), chanceDefense(0), baseHealth(0), CharA
     CharAttack = CharAttack + 30;
     //character defense
     CharDefense = CharDefense + 20;
+    //strength
+    strength = strength + 80;
 }
 
 //Used for when the player attacks an enemy

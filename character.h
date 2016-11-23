@@ -13,7 +13,40 @@ class character
 {
 public:
     //character class
-    character();
+    character(int r)
+    {
+    race =r;
+
+    }
+void creat_other_feature(int r)
+    {
+        if(r==1)
+        {
+            setattack(37);
+            setdefence(56);
+
+
+        }
+        if(r==2)
+        {
+
+
+        }
+
+    }
+
+    void setattack(int a1)
+    {
+        chanceAttack = a1;
+    }
+void setdefence(int a2)
+{
+
+    chanceDefence = a2;
+}
+
+
+
     //player attacks an enemy
     //enemies can't attack as they can't move
     void Attack(character& enemy);
@@ -21,6 +54,7 @@ public:
     bool IsDead();
 
 private:
+    unsigned int race;
     //attack chance
     unsigned int chanceAttack;
     //defense chance
@@ -31,5 +65,7 @@ private:
     unsigned int CharAttack;
     //defense
     unsigned int CharDefense;
+    //strength
+    unsigned int strength;
 };
 #endif 
