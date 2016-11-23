@@ -37,7 +37,9 @@ public:
     //end game if all foes dead
     bool AllFoesDead();
     static vector<item> inventory;
-    int CheckItem(unsigned int x);
+    bool checkItemType(unsigned int x);
+    bool checkInventorySpace(unsigned int CurLoc);
+
 
 private:
     //locate a character
@@ -50,12 +52,13 @@ private:
     character Player;
     //create enemy characters
     character Enemies[20];
-    charcter temp = character(1);
-    Enemies[0]= temp;
+    //charcter temp = character(1);
+    //Enemies[0]= temp;
 
     // should use two d arrys to store both above and below
     //create items
     item Items[20];
+
     //create a matrix of character locations
     static vector<vector<character*> > CharacterLocation;
     //create a matrix of item locations

@@ -6,12 +6,21 @@
 #include <vector>
 #include "item.h"
 using namespace std;
-item::item() : weight(0), name("")
+item::item() : id(0), weight(0), name(""), attack(0), defense(0), health(0)
 {
-    //weight of item
-	weight = 5;
-	name = "blah";
+    id = 0;
+	weight = 0;
+	name = "Defluat";
+    attack = 0;
+    defense = 0;
+    health = 0;
 }
+
+/*item::item(int id)
+{
+    id;
+}*/
+
 
 //item weapon::weapon(): weight(0), name(""), damage(0)
 //{

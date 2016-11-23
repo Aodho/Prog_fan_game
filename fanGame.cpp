@@ -84,6 +84,7 @@ FantasyGame::FantasyGame(int rows,int cols) {
         //randomly generating 10 items needs to be updated
         if (QueryLocation(Row, Col) == 0) {
             ItemLocation[Row][Col] = &Items[item];
+            Items[item - 17].setUpItem(1+(rand()%8));
             ++item;
             if (item == 27) {
                 genItems = true;
@@ -113,7 +114,6 @@ int FantasyGame::QueryLocation(unsigned int Row, unsigned int Col) {
         return board::map[Row][Col];
     }
 }
-
 //this needs to be updated so it doesn't have a hardcoded 20 rather the correct rows and cols
 bool FantasyGame::LocateCharacter(unsigned int& rRow, unsigned int& cCol,character* xyCharacter) {
 	for (unsigned int Row = 0; Row < 20; ++Row) {
@@ -126,6 +126,26 @@ bool FantasyGame::LocateCharacter(unsigned int& rRow, unsigned int& cCol,charact
 		}
 	}
 	return false;
+}
+
+bool FantasyGame::checkItemType(unsigned int CurLoc){
+    for (int j = 0;j<inventory.size(); ++j){
+        if(inventory[j].getType() == Items[CurLoc - 17].getType()){
+            return false;
+        }
+    }
+    return true;
+}
+bool FantasyGame::checkInventorySpace(unsigned int CurLoc){
+    unsigned int total = 0;
+    for (int j = 0;j<inventory.size(); ++j){
+        total = (total + inventory[j].getWeight());
+    }
+    if ((total + Items[CurLoc - 17].getWeight())>Player.getStrength())
+    {
+        return false;
+    }
+    return true;
 }
 
 bool FantasyGame::MovePlayer(const char Movement) {
@@ -162,10 +182,17 @@ bool FantasyGame::MovePlayer(const char Movement) {
         case 'P':
             {
                 if (CurLoc >= 17 && CurLoc <= 27){
-                    //pickedUpItems[CurLoc] = (Items[CurLoc - 17]);
-                    //cout << pickedUpItems;
-                    inventory.push_back(Items[CurLoc - 17]);
-                    ItemLocation[PlayerRow][PlayerCol] = 0;
+                    if(checkItemType(CurLoc) == true){
+                        if(checkInventorySpace(CurLoc) == true){
+                        inventory.push_back(Items[CurLoc - 17]);
+                        ItemLocation[PlayerRow][PlayerCol] = 0;
+                        }else{
+                          cout << "Not Strong enough to carry any more items \n";
+                        }
+                    }else{
+                        cout << "Item of Type: " << Items[CurLoc - 17].getType() << " already present in inventory \n";
+                        return false;
+                    }
                     return true;
                }else{
                     return false;
@@ -177,14 +204,12 @@ bool FantasyGame::MovePlayer(const char Movement) {
                 if (inventory.size() > 0){
                     cout << "INVENTORY: \n";
                     for (int j = 0;j<inventory.size(); ++j){
-                       cout << j << "). " << inventory[j].name << "," << "\n";
+                       cout << j << "). " << inventory[j].getname() << ", Weight: " << inventory[j].getWeight()<< ", Attack: " << inventory[j].getAttack()<< ", Defense: " << inventory[j].getDefense()<< ", Strength: " << inventory[j].getStrength()<< ", Health: " << inventory[j].getHealth()<< "," << "\n";
                     }
                     if(CurLoc == 3){
 						unsigned int x;
                         cout << "Please enter Item number from inventory list";
 						cin >> x;
-                        //item thing = inventory[x];
-                        //ItemLocation[PlayerRow][PlayerCol] = CheckItem(x);
 						inventory.erase(inventory.begin() + x);
                     }
                     else{
@@ -201,7 +226,8 @@ bool FantasyGame::MovePlayer(const char Movement) {
                 cout << "INVENTORY: \n";
                 if (inventory.size() > 0){
                     for (int j = 0;j<inventory.size(); ++j){
-                       cout << j << "). " << inventory[j].name << "," << "\n";
+                       cout << j << "). " << inventory[j].getname() << ", Weight: " << inventory[j].getWeight() << ", Attack: " << inventory[j].getAttack()<< ", Defense: " << inventory[j].getDefense()<< ", Strength: " << inventory[j].getStrength()<<  ", Health: " << inventory[j].getHealth()<< "," << "\n";
+
                     }
                 }
                 else{

@@ -1,5 +1,5 @@
 all:
-	g++ character.h item.h board.h fanGame.h character.cpp item.cpp board.cpp fanGame.cpp  main.cpp -g -o fantasyGameBinary
+	g++ -std=c++11 character.h item.h board.h fanGame.h character.cpp item.cpp board.cpp fanGame.cpp  main.cpp -g -o fantasyGameBinary
 
 clean:
 	rm -rf *o fantasyGameBinary

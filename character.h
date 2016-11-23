@@ -13,7 +13,18 @@ class character
 {
 public:
     //character class
-    character(int r)
+    character();
+	int getStrength()
+	{   
+		return strength;
+	}
+
+	void setStrength(int s)
+	{
+		strength =s;
+	}
+
+/*    character(int r)
     {
     race =r;
 
@@ -43,9 +54,7 @@ void setdefence(int a2)
 {
 
     chanceDefence = a2;
-}
-
-
+}*/
 
     //player attacks an enemy
     //enemies can't attack as they can't move

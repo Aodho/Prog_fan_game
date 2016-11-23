@@ -15,37 +15,157 @@ class item
 {
     public:
         item();
-        unsigned int weight;
-        string name;
+
+        item(int i)
+        {
+            id = i;
+        }
         
+        int getID()
+        {
+            return id;
+        }
+
         int getWeight()
         {
             return weight;
         }
 
+        int getHealth()
+        {
+            return health;
+        }
+
+        int getAttack()
+        {
+            return attack;
+        }
+
+        int getDefense()
+        {
+            return defense;
+        }
 
         string getname()
-          {
+        {
              return name;
-          }
-
-        void setweight(int a)
-        {
-            weight =a;
         }
 
-        void setname (string b)
+        string getType()
         {
-            name = b;
+            return type;
         }
 
+        int getStrength()
+        {
+            return strength;
+        }
 
+        void setStrength(int s)
+        {
+            strength =s;
+        }
+
+        void setType(string t)
+        {
+            type =t;
+        }
+
+        void setweight(int w)
+        {
+            weight =w;
+        }
+
+        void setHealth(int h)
+        {
+            health = h;
+        }
+
+        void setAttack(int a)
+        {
+            attack = a;
+        }
+
+        void setDefense(int d)
+        {
+            defense = d;
+        }
+
+        void setname (string n)
+        {
+            name = n;
+        }
+
+        void setUpItem(int i)
+        {
+            if(i==1){
+                setname("Sword");
+                setAttack(10);
+                setweight(10);
+                setStrength(0);
+                setType("Weapon");
+            }
+            else if(i==2){
+                setname("Dagger");
+                setAttack(5);
+                setweight(5);
+                setStrength(0);
+                setType("Weapon");
+            }
+            else if(i==3){
+                setname("Plate Armour");
+                setAttack(-5);
+                setDefense(10);
+                setweight(40);
+                setStrength(0);
+                setType("Armour");
+            }
+            else if(i==4){
+                setname("Leather Armour");
+                setDefense(5);
+                setweight(20);
+                setStrength(0);
+                setType("Armour");
+            }
+            else if(i==5){
+                setname("Large Shield");
+                setAttack(-5);
+				setDefense(10);
+                setweight(30);
+                setStrength(0);
+                setType("Shield");
+            }
+            else if(i==6){
+                setname("Small Shield");
+                setDefense(5);
+                setweight(10);
+                setStrength(0);
+                setType("Shield");
+            }
+            else if(i==7){
+                setname("Ring of Life");
+                setHealth(10);
+                setweight(1);
+                setStrength(0);
+                setType("Ring");
+            }
+            else if(i==8){
+                setname("Ring of Strength");
+				setStrength(50);
+                setHealth(-10);
+                setweight(1);
+                setType("Ring");
+            }
+        }
+    private:
+        unsigned int id;
+        string name;
+        unsigned int weight;
+		unsigned int strength;
+        int health;
+        int attack;
+        string type;
+        unsigned int defense;
 };
 
-//class weapon:public item
-//{
-//    public:
-//        weapon();
-//        int damage; 
-//};
 #endif

@@ -21,7 +21,7 @@ character::character() : chanceAttack(0), chanceDefense(0), baseHealth(0), CharA
     //character defense
     CharDefense = CharDefense + 20;
     //strength
-    strength = strength + 80;
+    strength = strength + 100;
 }
 
 //Used for when the player attacks an enemy
