@@ -8,10 +8,16 @@
 #include "fanGame.h"
 using namespace std;
 
-//character class used to generate characters
-character::character() : chanceAttack(0), chanceDefense(0), baseHealth(0), CharAttack(0), CharDefense(0), strength(0)
+/*character()
+ *  setting up the default character object.
+ *  setting default values for attackChance, DefenseChance, 
+ *  Attack, Defense, Health, and strength.
+ */
+character::character() : id(0), race(""), chanceAttack(0), chanceDefense(0), baseHealth(0), CharAttack(0), CharDefense(0), strength(0)
 {
     //character chance of attack
+	id=0;
+	race="default";
 	chanceAttack = chanceAttack + (rand() % 33);
     //character chance of defense
 	chanceDefense = chanceDefense + (rand() % 50);
@@ -24,8 +30,14 @@ character::character() : chanceAttack(0), chanceDefense(0), baseHealth(0), CharA
     //strength
     strength = strength + 100;
 }
-
-//Used for when the player attacks an enemy
+/*Attack(character& enemy)
+ * This is the main combat function of the program
+ * It determines wether or not an attack was successful, blocked or missed
+ * It deducts the correct amount of health based on the hit to both the enemy and player
+ * As the player are the only characters moving on the board
+ * it is safe to assume the player made the attack
+ * And the enemy character retaliated
+ */
 void character::Attack(character& enemy) {
 	// Generate a numbers between 1 and 100
     // the generated numbers will be compared with
@@ -52,7 +64,7 @@ void character::Attack(character& enemy) {
         else{
           //if blocked the attack - defence will hit
           for(unsigned int j = 0; j < (CharAttack - enemy.CharDefense); ++j){
-                  --enemy.baseHealth;
+                  Ability(enemy); //--enemy.baseHealth
           }
           std::cout << "Enemy Blocked!" << std::endl;
         }
@@ -69,13 +81,14 @@ void character::Attack(character& enemy) {
             //if not blocked full attack will hit
             for(unsigned int j = 0; j < (enemy.CharAttack); ++j){
                 --baseHealth;
+		
             }
 		std::cout << "Player Hit!" << std::endl;
         }
         else{
              //if blocked the attack - defence will hit
              for(unsigned int j = 0; j < (enemy.CharAttack - CharDefense); ++j){
-                 --baseHealth;
+			Ability(character());   //--baseHealth;
              }
           std::cout << "Player Blocked!" << std::endl;
         }
@@ -88,8 +101,37 @@ void character::Attack(character& enemy) {
 	std::cout << "Enemy Health:" << enemy.baseHealth << std::endl;
 }
 
-//check if the character in question is dead
+/*IsDead()
+ *  Checks wether the character in question is dead
+ */
 bool character::IsDead() {
     return (baseHealth <= 0);
 }
+
+/*Ability(character)
+ *  Used to give each individual race it's unique ability 
+ */
+void character::Ability(character){
+
+	if(race=="Human"){
+		baseHealth = baseHealth;
+	}
+	if(race=="Elf"){
+		baseHealth = baseHealth+1;
+	}
+	if(race=="Dwarf"){
+		baseHealth=baseHealth;
+	}
+	if(race=="Hobbit"){
+		baseHealth=baseHealth - (1+(rand()%5));
+	}
+	if(race=="Orc"){
+		cout << "orcyorcorcorc" <<endl;
+	}
+}
+
+
+
+
+
 

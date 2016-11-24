@@ -17,7 +17,12 @@ using namespace std;
 //vector< vector<int> > map;
 //used to initialise a blank empty 10x10 matrix
 vector< vector<int> > board::map(10,vector<int>(10));
-
+/*board(int Rows, int Cols)
+ *   Generate a board of walls around the edge and blank spaces in the middle
+ *   This is achieve by setting up a 2 dimensional vector, resizing the 
+ *   vector based on user input "Rows" and "Cols" and then populating this
+ *   two dimensional vector using for loops
+ */
 board::board(int Rows, int Cols)
 {
     //used to resize the initialised matrix to the correct number of rows

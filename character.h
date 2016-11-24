@@ -15,12 +15,15 @@ class character
 public:
     //character class
     character();
-
+    //initialise with Id
         character(int i)
         {
             id = i;
         }
-
+/*A series of getter and setter methods for 
+ * a variety of attributes including:
+ * ID,race,Attack,Defence,AttackChance,DefenseChance,Strength and health
+ */
         int getID()
         {
             return id;
@@ -92,7 +95,10 @@ public:
         {
             baseHealth = H;
         }
-
+/*setUpCharacter(int i)
+ * Setting up the different character races
+ * Uses setter methods to set the value of each race
+ */
     void setUpCharacter(int i)
     {
         if(i==1){
@@ -147,9 +153,13 @@ public:
     void Attack(character& enemy);
     //check if character is dead
     bool IsDead();
+    //Function for special ability
+    void Ability(character);
 
 private:
+    //id
     unsigned int id;
+    //race of character
     string race;
     //attack chance
     unsigned int chanceAttack;
