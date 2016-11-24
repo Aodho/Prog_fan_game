@@ -128,7 +128,7 @@ int FantasyGame::QueryLocation(unsigned int Row, unsigned int Col) {
         return board::map[Row][Col];
     }
 }
-//this needs to be updated so it doesn't have a hardcoded 20 rather the correct rows and cols
+
 bool FantasyGame::LocateCharacter(unsigned int& rRow, unsigned int& cCol,unsigned int Rows,unsigned int Cols,character* xyCharacter) {
 	for (unsigned int Row = 0; Row < Rows; ++Row) {
 		for (unsigned int Col = 0; Col < Cols; ++Col) {
@@ -165,6 +165,31 @@ bool FantasyGame::checkInventorySpace(unsigned int Row,unsigned int Col){
     return true;
 }
 
+void FantasyGame::setUpItems(unsigned int Row, unsigned int Col)
+{
+    Player.setCharDefense(Player.getCharDefense() + Items[Row][Col].getDefense());
+    Player.setCharAttack(Player.getCharAttack() + Items[Row][Col].getAttack());
+    Player.setStrength(Player.getStrength() + Items[Row][Col].getStrength());
+    Player.setbaseHealth(Player.getbaseHealth() + Items[Row][Col].getHealth());
+}
+
+void FantasyGame::removeItems(unsigned int Row, unsigned int Col)
+{
+    Player.setCharDefense(Player.getCharDefense() - Items[Row][Col].getDefense());
+    Player.setCharAttack(Player.getCharAttack() - Items[Row][Col].getAttack());
+    Player.setStrength(Player.getStrength() - Items[Row][Col].getStrength());
+    Player.setbaseHealth(Player.getbaseHealth() - Items[Row][Col].getHealth());
+}
+
+void FantasyGame::lookAround(unsigned int Row,unsigned int Col)
+{
+    cout <<"Currently Standing on: " << Items[Row][Col].getname() << "\n";
+    cout <<"North there is: " << Items[Row - 1][Col].getname() << Enemies[Row - 1][Col].getrace() << "\n";
+    cout <<"South there is: " << Items[Row + 1][Col].getname() << Enemies[Row + 1][Col].getrace() << "\n";
+    cout <<"West there is: " << Items[Row][Col - 1].getname() << Enemies[Row][Col - 1].getrace()  << "\n";
+    cout <<"East there is: " << Items[Row][Col + 1].getname() << Enemies[Row][Col + 1].getrace()  << "\n";
+}
+
 bool FantasyGame::MovePlayer(const char Movement,unsigned int Rows,unsigned int Cols) {
 	unsigned int PlayerRow;
 	unsigned int PlayerCol;
@@ -196,12 +221,18 @@ bool FantasyGame::MovePlayer(const char Movement,unsigned int Rows,unsigned int 
 				--NextCol;
 				break;
 			}
+        case 'L':
+            {
+                lookAround(PlayerRow,PlayerCol);
+                break;
+            }
         case 'P':
             {
                 if (CurLoc == 2){
                     if(checkItemType(PlayerRow,PlayerCol) == true){
                         if(checkInventorySpace(PlayerRow,PlayerCol) == true){
                         inventory.push_back(Items[PlayerRow][PlayerCol]);
+                        setUpItems(PlayerRow,PlayerCol);
                         ItemLocation[PlayerRow][PlayerCol] = 0;
                         }else{
                           cout << "Not Strong enough to carry any more items \n";
@@ -229,6 +260,7 @@ bool FantasyGame::MovePlayer(const char Movement,unsigned int Rows,unsigned int 
 						cin >> x;
                         ItemLocation[PlayerRow][PlayerCol] = &Items[PlayerRow][PlayerCol];
                         Items[PlayerRow][PlayerCol].setUpItem(inventory[x].getID());
+                        removeItems(PlayerRow,PlayerCol);
 						inventory.erase(inventory.begin() + x);
                         return true;
                     }
@@ -337,7 +369,7 @@ for (int down = 0; down < Rows; down++) {
 	}
 	cout << endl;
 }
-
+cout << "\n Health: " << Player.getbaseHealth() << "\n Attack: " << Player.getCharAttack() << "\n Defense: " << Player.getCharDefense() << "\n Strength: " << Player.getStrength();
 }
 
 

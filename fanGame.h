@@ -36,9 +36,18 @@ public:
     void RemoveDeadFoes(unsigned int Row, unsigned int Col,unsigned int Rows,unsigned int Cols);
     //end game if all foes dead
     bool AllFoesDead(unsigned int Row, unsigned int Col);
+    //Inventory of items
     static vector<item> inventory;
+    //Function to check the type of the item
     bool checkItemType(unsigned int Row, unsigned int Col);
+    //Function to check the strength of the character
     bool checkInventorySpace(unsigned int Row, unsigned int Col);
+
+    void setUpItems(unsigned int Row, unsigned int Col);
+
+    void removeItems(unsigned int Row, unsigned int Col);
+
+    void lookAround(unsigned int Row,unsigned int Col);
 
 private:
     //locate a character

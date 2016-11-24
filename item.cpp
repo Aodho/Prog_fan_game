@@ -10,7 +10,7 @@ item::item() : id(0), weight(0), name(""), attack(0), defense(0), health(0)
 {
     id = 0;
 	weight = 0;
-	name = "Defluat";
+	name = "";
     attack = 0;
     defense = 0;
     health = 0;
