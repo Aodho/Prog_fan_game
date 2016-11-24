@@ -150,11 +150,11 @@ public:
 
     //player attacks an enemy
     //enemies can't attack as they can't move
-    void Attack(character& enemy);
+    void Attack(character& enemy, bool night);
     //check if character is dead
     bool IsDead();
     //Function for special ability
-    void Ability(character);
+    void Ability(character,bool,int);
 
 private:
     //id

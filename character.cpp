@@ -38,7 +38,7 @@ character::character() : id(0), race(""), chanceAttack(0), chanceDefense(0), bas
  * it is safe to assume the player made the attack
  * And the enemy character retaliated
  */
-void character::Attack(character& enemy) {
+void character::Attack(character& enemy, bool night) {
 	// Generate a numbers between 1 and 100
     // the generated numbers will be compared with
     // the chance of attack and defense to see if the
@@ -63,8 +63,9 @@ void character::Attack(character& enemy) {
         }
         else{
           //if blocked the attack - defence will hit
-          for(unsigned int j = 0; j < (CharAttack - enemy.CharDefense); ++j){
-                  Ability(enemy); //--enemy.baseHealth
+          int adjustedDamage = CharAttack - enemy.CharDefense;
+          for(unsigned int j = 0; j < (adjustedDamage); ++j){
+                  Ability(enemy, night, adjustedDamage); //--enemy.baseHealth
           }
           std::cout << "Enemy Blocked!" << std::endl;
         }
@@ -87,8 +88,9 @@ void character::Attack(character& enemy) {
         }
         else{
              //if blocked the attack - defence will hit
-             for(unsigned int j = 0; j < (enemy.CharAttack - CharDefense); ++j){
-			Ability(character());   //--baseHealth;
+             int adjustedDamage2 = CharAttack - enemy.CharDefense;
+             for(unsigned int j = 0; j < (adjustedDamage2); ++j){
+			Ability(character(), night, adjustedDamage2);   //--baseHealth;
              }
           std::cout << "Player Blocked!" << std::endl;
         }
@@ -111,7 +113,7 @@ bool character::IsDead() {
 /*Ability(character)
  *  Used to give each individual race it's unique ability 
  */
-void character::Ability(character){
+void character::Ability(character,bool night, int aD ){
 
 	if(race=="Human"){
 		baseHealth = baseHealth;
@@ -126,7 +128,13 @@ void character::Ability(character){
 		baseHealth=baseHealth - (1+(rand()%5));
 	}
 	if(race=="Orc"){
-		cout << "orcyorcorcorc" <<endl;
+        if(night == true){
+          baseHealth = baseHealth+1;
+        }
+        else if (night == false){
+          baseHealth=baseHealth-(int)(aD/4);
+        }
+		
 	}
 }
 

@@ -367,7 +367,8 @@ bool FantasyGame::MovePlayer(const char Movement,unsigned int Rows,unsigned int 
 		CharacterLocation[PlayerRow][PlayerCol] = 0;
 		return true;
 	}else if (NextLoc == 1) {
-		Player.Attack(Enemies[NextRow][NextCol]);
+        bool night = getNight();
+		Player.Attack(Enemies[NextRow][NextCol],night);
         RemoveDeadFoes(NextRow,NextCol,Rows,Cols);
 		return true;
      //if not enemy or player returns false as it is a wall
