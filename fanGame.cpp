@@ -20,6 +20,7 @@ vector<item> FantasyGame::inventory(0);
 vector< vector<item> > FantasyGame::Items(10,vector<item>(10));
 
 vector< vector<character> > FantasyGame::Enemies(10,vector<character>(10));
+unsigned int Gold = 0;
 
 FantasyGame::FantasyGame(int rows,int cols) {
 
@@ -190,6 +191,78 @@ void FantasyGame::lookAround(unsigned int Row,unsigned int Col)
     cout <<"East there is: " << Items[Row][Col + 1].getname() << Enemies[Row][Col + 1].getrace()  << "\n";
 }
 
+void FantasyGame::showInventory()
+{
+	cout << "INVENTORY: \n";
+	if (inventory.size() > 0){
+		for (int j = 0;j<inventory.size(); ++j){
+		   cout << j << "). " << inventory[j].getname() << ", Weight: " << inventory[j].getWeight() ;
+		   cout<< ", Attack: " << inventory[j].getAttack()<< ", Defense: " << inventory[j].getDefense();
+		   cout << ", Strength: " << inventory[j].getStrength()<<  ", Health: " << inventory[j].getHealth()<< "," << "\n";
+		}
+	}
+	else{
+		cout << "Nothing in inventory" << "\n";
+	}
+	cout << "Gold: " << Gold << "\n";
+
+
+}
+
+bool FantasyGame::pickUpItem(int CurLoc,int PlayerRow,int PlayerCol)
+{
+	if (CurLoc == 2){
+		if(checkItemType(PlayerRow,PlayerCol) == true){
+			if(checkInventorySpace(PlayerRow,PlayerCol) == true){
+			inventory.push_back(Items[PlayerRow][PlayerCol]);
+			setUpItems(PlayerRow,PlayerCol);
+			ItemLocation[PlayerRow][PlayerCol] = 0;
+			}else{
+			  cout << "Not Strong enough to carry any more items \n";
+			}
+		}else{
+			cout << "Item of Type: " << Items[PlayerRow][PlayerCol].getType() << " already present in inventory \n";
+			return false;
+		}
+		return true;
+   }
+   else{
+		return false;
+   }
+
+}
+
+bool FantasyGame::dropItem(int CurLoc,int PlayerRow,int PlayerCol)
+{
+	if (inventory.size() > 0){
+		cout << "INVENTORY: \n";
+		for (int j = 0;j<inventory.size(); ++j){
+           cout << j << "). " << inventory[j].getname() << ", Weight: " << inventory[j].getWeight() ;
+           cout<< ", Attack: " << inventory[j].getAttack()<< ", Defense: " << inventory[j].getDefense();
+           cout << ", Strength: " << inventory[j].getStrength()<<  ", Health: " << inventory[j].getHealth()<< "," << "\n";
+		}
+		if(CurLoc == 3){
+			unsigned int x;
+			cout << "Please enter Item number from inventory list: ";
+			cin >> x;
+			ItemLocation[PlayerRow][PlayerCol] = &Items[PlayerRow][PlayerCol];
+			Items[PlayerRow][PlayerCol].setUpItem(inventory[x].getID());
+			removeItems(PlayerRow,PlayerCol);
+			inventory.erase(inventory.begin() + x);
+			return true;
+		}
+		else{
+			cout << "Unable to drop item as space is not free!";
+			return false;
+		}
+	}
+	else{
+		cout << "Nothing Present in inventory";
+		return false;
+	}
+
+}
+
 bool FantasyGame::MovePlayer(const char Movement,unsigned int Rows,unsigned int Cols) {
 	unsigned int PlayerRow;
 	unsigned int PlayerCol;
@@ -228,65 +301,17 @@ bool FantasyGame::MovePlayer(const char Movement,unsigned int Rows,unsigned int 
             }
         case 'P':
             {
-                if (CurLoc == 2){
-                    if(checkItemType(PlayerRow,PlayerCol) == true){
-                        if(checkInventorySpace(PlayerRow,PlayerCol) == true){
-                        inventory.push_back(Items[PlayerRow][PlayerCol]);
-                        setUpItems(PlayerRow,PlayerCol);
-                        ItemLocation[PlayerRow][PlayerCol] = 0;
-                        }else{
-                          cout << "Not Strong enough to carry any more items \n";
-                        }
-                    }else{
-                        cout << "Item of Type: " << Items[PlayerRow][PlayerCol].getType() << " already present in inventory \n";
-                        return false;
-                    }
-                    return true;
-               }else{
-                    return false;
-               }
+				pickUpItem(CurLoc,PlayerRow,PlayerCol);
                 break;
             }
         case 'O':
             {
-                if (inventory.size() > 0){
-                    cout << "INVENTORY: \n";
-                    for (int j = 0;j<inventory.size(); ++j){
-                       cout << j << "). " << inventory[j].getname() << ", Weight: " << inventory[j].getWeight()<< ", Attack: " << inventory[j].getAttack()<< ", Defense: " << inventory[j].getDefense()<< ", Strength: " << inventory[j].getStrength()<< ", Health: " << inventory[j].getHealth()<< "," << "\n";
-                    }
-                    if(CurLoc == 3){
-						unsigned int x;
-                        cout << "Please enter Item number from inventory list";
-						cin >> x;
-                        ItemLocation[PlayerRow][PlayerCol] = &Items[PlayerRow][PlayerCol];
-                        Items[PlayerRow][PlayerCol].setUpItem(inventory[x].getID());
-                        removeItems(PlayerRow,PlayerCol);
-						inventory.erase(inventory.begin() + x);
-                        return true;
-                    }
-                    else{
-                        cout << "Unable to drop item as space is not free!";
-                        return false;
-                    }
-                }
-                else{
-                    cout << "Nothing Present in inventory";
-                    return false;
-                }
-             break;
+				dropItem(CurLoc,PlayerRow,PlayerCol);
+             	break;
             }
         case 'I':
             {
-                cout << "INVENTORY: \n";
-                if (inventory.size() > 0){
-                    for (int j = 0;j<inventory.size(); ++j){
-                       cout << j << "). " << inventory[j].getname() << ", Weight: " << inventory[j].getWeight() << ", Attack: " << inventory[j].getAttack()<< ", Defense: " << inventory[j].getDefense()<< ", Strength: " << inventory[j].getStrength()<<  ", Health: " << inventory[j].getHealth()<< "," << "\n";
-
-                    }
-                }
-                else{
-                    cout << "Nothing in inventory" << "\n";
-                }
+				showInventory();
                 return true;
                 break;
             }
@@ -324,6 +349,7 @@ bool FantasyGame::PlayerIsDead() {
 void FantasyGame::RemoveDeadFoes(unsigned int Row, unsigned int Col,unsigned int Rows,unsigned int Cols) {
     if (Enemies[Row][Col].IsDead()) {
         if (LocateCharacter(Row, Col,Rows,Cols,&(Enemies[Row][Col]))) {
+            Gold = (Gold + Enemies[Row][Col].getCharDefense());
             CharacterLocation[Row][Col] = 0;
             std::cout << "Enemy Killed!" << std::endl;
         }

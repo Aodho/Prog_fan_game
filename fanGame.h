@@ -49,6 +49,12 @@ public:
 
     void lookAround(unsigned int Row,unsigned int Col);
 
+    void showInventory();
+
+    bool pickUpItem(int CurLoc, int Row, int Col);
+
+    bool dropItem(int CurLoc, int Row, int Col);
+
 private:
     //locate a character
     bool LocateCharacter(unsigned int& rRow, unsigned int& cCol,unsigned int Rows,unsigned int Cols, character* xyCharacter);
