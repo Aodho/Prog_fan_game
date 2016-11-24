@@ -27,13 +27,13 @@ public:
     //find out character or item location
     int QueryLocation(unsigned int Rows, unsigned int Cols);
     //Move the player around the board
-    bool MovePlayer(const char Movement);
+    bool MovePlayer(const char Movement,unsigned int Rows,unsigned int Cols);
     //print the board
     void PrintBoard(int rows, int cols);
     //check if the player is alive if not end game
     bool PlayerIsDead();
     //remove dead enemies from the board
-    void RemoveDeadFoes(unsigned int Row, unsigned int Col);
+    void RemoveDeadFoes(unsigned int Row, unsigned int Col,unsigned int Rows,unsigned int Cols);
     //end game if all foes dead
     bool AllFoesDead(unsigned int Row, unsigned int Col);
     static vector<item> inventory;
@@ -42,7 +42,7 @@ public:
 
 private:
     //locate a character
-    bool LocateCharacter(unsigned int& rRow, unsigned int& cCol, character* xyCharacter);
+    bool LocateCharacter(unsigned int& rRow, unsigned int& cCol,unsigned int Rows,unsigned int Cols, character* xyCharacter);
 
 
     //createa new board
@@ -50,8 +50,8 @@ private:
     // create a player character
     character Player;
     //create enemy characters
-    character Enemies[50];
-    //static std::vector<std::vector<character> > Enemies;
+    //character Enemies[50];
+    static std::vector<std::vector<character> > Enemies;
     //create items
     static std::vector<std::vector<item> > Items;
     //create a matrix of character locations

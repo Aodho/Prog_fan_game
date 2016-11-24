@@ -19,6 +19,7 @@ vector<item> FantasyGame::inventory(0);
 //A vecotr of inventory
 vector< vector<item> > FantasyGame::Items(10,vector<item>(10));
 
+vector< vector<character> > FantasyGame::Enemies(10,vector<character>(10));
 
 FantasyGame::FantasyGame(int rows,int cols) {
 
@@ -36,17 +37,21 @@ FantasyGame::FantasyGame(int rows,int cols) {
 	time_t qTime;
 	time(&qTime);
 	srand((unsigned int)qTime);
+    int squares = rows*cols;
+    int tenPercent = (double)squares/(double)10;// * (1/10);
     //generate a new board
 	board newBoard(rows, cols);
     //used to resize the initialised matrix to the correct number of rows
     ItemLocation.resize(rows);        
     CharacterLocation.resize(rows);
     Items.resize(rows);
+    Enemies.resize(rows);
     for (int i = 0; i < rows; i++){
         //used to resize the initialised matrix to the correct number of colunms
         CharacterLocation[i].resize(cols);
         ItemLocation[i].resize(cols);
         Items[i].resize(cols);
+        Enemies[i].resize(cols);
     }
     // setting all values in the matrix to 0 as 0 is empty space
     for (unsigned int Row = 0; Row < 10; ++Row) {
@@ -70,16 +75,16 @@ FantasyGame::FantasyGame(int rows,int cols) {
 	}
 	// Create 10 Enemies
 	bool startPos2 = false;
-	unsigned int foe = 6;
+	unsigned int foe = 1;
 	while (!startPos2) {
 		unsigned int Row = 2 + (rand() % (rows - 2));
 		unsigned int Col = 2 + (rand() % (cols - 2));
         //randomly generating 10 enemies needs to be updated
 		if (QueryLocation(Row, Col) == 0) {
-			CharacterLocation[Row][Col] = &Enemies[foe];
-			Enemies[foe - 6].setUpCharacter(1+(rand()%5));
+			CharacterLocation[Row][Col] = &Enemies[Row][Col];
+			Enemies[Row][Col].setUpCharacter(1+(rand()%5));
 			++foe;
-			if (foe == 16) {
+			if (foe == tenPercent) {
 				startPos2 = true;
 			}
 	    }
@@ -95,7 +100,7 @@ FantasyGame::FantasyGame(int rows,int cols) {
             ItemLocation[Row][Col] = &Items[Row][Col];
             Items[Row][Col].setUpItem(1+(rand()%8));
             ++item;
-            if (item == 16) {
+            if (item == tenPercent) {
                 genItems = true;
             }
         }
@@ -106,8 +111,8 @@ FantasyGame::FantasyGame(int rows,int cols) {
 int FantasyGame::QueryLocation(unsigned int Row, unsigned int Col) {
     for (unsigned int i = 6; i < 16; ++i) {
         //if the location is an enemy reutrn 6-16 for enemies
-        if (CharacterLocation[Row][Col] == &(Enemies[i])) {
-            return i;
+        if (CharacterLocation[Row][Col] == &(Enemies[Row][Col])) {
+            return 1;
         }
     }
 	for (unsigned int j = 17; j < 27; ++j) {
@@ -124,9 +129,9 @@ int FantasyGame::QueryLocation(unsigned int Row, unsigned int Col) {
     }
 }
 //this needs to be updated so it doesn't have a hardcoded 20 rather the correct rows and cols
-bool FantasyGame::LocateCharacter(unsigned int& rRow, unsigned int& cCol,character* xyCharacter) {
-	for (unsigned int Row = 0; Row < 20; ++Row) {
-		for (unsigned int Col = 0; Col < 20; ++Col) {
+bool FantasyGame::LocateCharacter(unsigned int& rRow, unsigned int& cCol,unsigned int Rows,unsigned int Cols,character* xyCharacter) {
+	for (unsigned int Row = 0; Row < Rows; ++Row) {
+		for (unsigned int Col = 0; Col < Cols; ++Col) {
 			if (CharacterLocation[Row][Col] == xyCharacter) {
 				rRow = Row;
 				cCol = Col;
@@ -160,10 +165,10 @@ bool FantasyGame::checkInventorySpace(unsigned int Row,unsigned int Col){
     return true;
 }
 
-bool FantasyGame::MovePlayer(const char Movement) {
+bool FantasyGame::MovePlayer(const char Movement,unsigned int Rows,unsigned int Cols) {
 	unsigned int PlayerRow;
 	unsigned int PlayerCol;
-	LocateCharacter(PlayerRow, PlayerCol, &Player);
+	LocateCharacter(PlayerRow, PlayerCol, Rows, Cols, &Player);
     //locates the player and sets up a temporary location
 	unsigned int NextRow = PlayerRow;
 	unsigned int NextCol = PlayerCol;
@@ -270,8 +275,9 @@ bool FantasyGame::MovePlayer(const char Movement) {
 		CharacterLocation[NextRow][NextCol] = &Player;
 		CharacterLocation[PlayerRow][PlayerCol] = 0;
 		return true;
-	}else if (NextLoc >= 6 && NextLoc <= 16) {
-		Player.Attack(Enemies[NextLoc]);
+	}else if (NextLoc == 1) {
+		Player.Attack(Enemies[NextRow][NextCol]);
+        RemoveDeadFoes(NextRow,NextCol,Rows,Cols);
 		return true;
      //if not enemy or player returns false as it is a wall
 	} else {
@@ -283,26 +289,26 @@ bool FantasyGame::PlayerIsDead() {
 	return Player.IsDead();
 }
 //removes dead enemies
-void FantasyGame::RemoveDeadFoes(unsigned int Row, unsigned int Col) {
-	for (unsigned int i = 6; i < 16; ++i) {
-		if (Enemies[i].IsDead()) {
-			unsigned int Row;
-			unsigned int Col;
-			if (LocateCharacter(Row, Col,&(Enemies[i]))) {
-				CharacterLocation[Row][Col] = 0;
-				std::cout << "Enemy Killed!" << std::endl;
-			}
-		}
-	}
+void FantasyGame::RemoveDeadFoes(unsigned int Row, unsigned int Col,unsigned int Rows,unsigned int Cols) {
+    if (Enemies[Row][Col].IsDead()) {
+        if (LocateCharacter(Row, Col,Rows,Cols,&(Enemies[Row][Col]))) {
+            CharacterLocation[Row][Col] = 0;
+            std::cout << "Enemy Killed!" << std::endl;
+        }
+    }
 }
 //checks wether all foes are dead if so gameover
-bool FantasyGame::AllFoesDead(unsigned int Row, unsigned int Col) {
+bool FantasyGame::AllFoesDead(unsigned int Rows, unsigned int Cols) {
 	bool AllDead = true;
-	for (unsigned int i = 6; i < 16; ++i) {
-		if (!Enemies[i].IsDead()) {
-			AllDead = false;
-		}
-	}
+    for (int down = 0; down < Rows; down++) {
+        for (int across = 0; across < Cols; across++) {
+            switch(QueryLocation(down, across)){
+                case 2: //End Game no enemies
+                    AllDead = false;
+                break;
+            }
+        }
+    }
 	return AllDead;
 }
 
@@ -318,7 +324,7 @@ for (int down = 0; down < Rows; down++) {
 			case 2:  // item
 				cout << "$";
 			break;
-			case 6 ... 16: //Enemy
+			case 1: //Enemy
 				cout << "I";
 			break;
 			case 3: //player

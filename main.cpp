@@ -47,14 +47,12 @@ int main()
         move = toupper(move);
 
         system("clear");
-        if(newFantasyGame.MovePlayer(move)){
+        if(newFantasyGame.MovePlayer(move,Rows,Cols)){
             //If the Player is dead
             if(newFantasyGame.PlayerIsDead()){
                cout << "You have Died!" << endl;
                GameOver = true;
             } else {
-                // Remove all dead Foes from game
-                newFantasyGame.RemoveDeadFoes(Rows,Cols);
                 // If all of the Foes are dead
                 if (newFantasyGame.AllFoesDead(Rows,Cols)) {
                     cout << "Map Clear!" << endl;
