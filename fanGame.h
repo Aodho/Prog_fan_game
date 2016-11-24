@@ -38,6 +38,9 @@ public:
     bool AllFoesDead(unsigned int Row, unsigned int Col);
     //Inventory of items
     static vector<item> inventory;
+
+    static vector<character*> orcs;
+
     //Function to check the type of the item
     bool checkItemType(unsigned int Row, unsigned int Col);
     //Function to check the strength of the character
@@ -55,10 +58,22 @@ public:
 
     bool dropItem(int CurLoc, int Row, int Col);
 
+    void NightDay();
+
+    bool getNight()
+       {
+         return night;
+       }
+    void setNight(bool n)
+       {
+         night = n;
+       }
+
+
 private:
     //locate a character
     bool LocateCharacter(unsigned int& rRow, unsigned int& cCol,unsigned int Rows,unsigned int Cols, character* xyCharacter);
-
+    bool night;
 
     //createa new board
     board newBoard(int rows, int cols);

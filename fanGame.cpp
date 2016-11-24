@@ -16,6 +16,8 @@ vector< vector<character*> > FantasyGame::CharacterLocation(10,vector<character*
 vector< vector<item*> > FantasyGame::ItemLocation(10,vector<item*>(10));
 //initialise a matrix of item pointers showing locations
 vector<item> FantasyGame::inventory(0);
+
+vector<character*> FantasyGame::orcs(0);
 //A vecotr of inventory
 vector< vector<item> > FantasyGame::Items(10,vector<item>(10));
 
@@ -37,6 +39,7 @@ FantasyGame::FantasyGame(int rows,int cols) {
 	// Initlialize the random number generator
 	time_t qTime;
 	time(&qTime);
+    setNight(false);
 	srand((unsigned int)qTime);
     int squares = rows*cols;
     int tenPercent = (double)squares/(double)10;// * (1/10);
@@ -72,6 +75,10 @@ FantasyGame::FantasyGame(int rows,int cols) {
             //setting up the player a point (1,1) in the matrix
 			CharacterLocation[Row][Col] = &Player;
 			Player.setUpCharacter(p);
+            if (p == 5){
+               orcs.push_back(&Player);
+            }
+
 		}
 	}
 	// Create 10 Enemies
@@ -82,8 +89,12 @@ FantasyGame::FantasyGame(int rows,int cols) {
 		unsigned int Col = 2 + (rand() % (cols - 2));
         //randomly generating 10 enemies needs to be updated
 		if (QueryLocation(Row, Col) == 0) {
+            int x = 1+(rand()%5);
 			CharacterLocation[Row][Col] = &Enemies[Row][Col];
-			Enemies[Row][Col].setUpCharacter(1+(rand()%5));
+			Enemies[Row][Col].setUpCharacter(x);
+            if (x == 5){
+            orcs.push_back(&Enemies[Row][Col]);
+            }
 			++foe;
 			if (foe == tenPercent) {
 				startPos2 = true;
@@ -180,6 +191,29 @@ void FantasyGame::removeItems(unsigned int Row, unsigned int Col)
     Player.setCharAttack(Player.getCharAttack() - Items[Row][Col].getAttack());
     Player.setStrength(Player.getStrength() - Items[Row][Col].getStrength());
     Player.setbaseHealth(Player.getbaseHealth() - Items[Row][Col].getHealth());
+}
+
+void FantasyGame::NightDay()
+{
+    if (orcs.size() > 0){
+        if(getNight() == false){
+            for (int j = 0;j<orcs.size(); ++j){
+                orcs[j] -> setCharAttack(orcs[j] -> getCharAttack() - 20);
+                orcs[j] -> setCharDefense(orcs[j] -> getCharDefense() - 15);
+                orcs[j] -> setchanceAttack(orcs[j] -> getchanceAttack() - 75);
+                orcs[j] -> setchanceDefense(orcs[j] -> getchanceDefense() - 25);
+
+            }
+        }else if (getNight() == true){
+            for (int j = 0;j<orcs.size(); ++j){
+                orcs[j] -> setCharAttack(orcs[j] -> getCharAttack() + 20);
+                orcs[j] -> setCharDefense(orcs[j] -> getCharDefense() + 15);
+                orcs[j] -> setchanceAttack(orcs[j] -> getchanceAttack() + 75);
+                orcs[j] -> setchanceDefense(orcs[j] -> getchanceDefense() + 25);
+            }
+
+        }
+    }
 }
 
 void FantasyGame::lookAround(unsigned int Row,unsigned int Col)

@@ -34,7 +34,10 @@ int main()
     //generates the game and board
     FantasyGame newFantasyGame(Rows,Cols);
     system("clear");
-    
+
+	int counter = 0;
+    bool night =false;
+
     //sets the gameover to be false
 	bool GameOver = false;
     do
@@ -47,6 +50,24 @@ int main()
         move = toupper(move);
 
         system("clear");
+        counter++;
+        if(newFantasyGame.getNight() == false){
+            if(counter==5){
+                newFantasyGame.setNight(true);
+                newFantasyGame.NightDay();
+                cout << "It is now NightTime Orcs are stronger \n\n";
+                counter =0;
+            }
+        }
+        else if(newFantasyGame.getNight() == true){
+            if(counter==5){
+                newFantasyGame.setNight(false);
+                newFantasyGame.NightDay();
+                cout << "It is now DayTime Orcs are weaker \n\n";
+                counter = 0;
+            }
+        }
+
         if(newFantasyGame.MovePlayer(move,Rows,Cols)){
             //If the Player is dead
             if(newFantasyGame.PlayerIsDead()){
