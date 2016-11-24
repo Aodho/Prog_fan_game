@@ -4,6 +4,7 @@
 // authors: Hugh, Conor, Diarmuid
 // date:    12.11.2016
 //////////////////////////////////////////////////////////////////////
+#include "fanGame.h"
 #ifndef CHARACTER_H
 #define CHARACTER_H
  
@@ -14,47 +15,132 @@ class character
 public:
     //character class
     character();
-	int getStrength()
-	{   
-		return strength;
-	}
 
-	void setStrength(int s)
-	{
-		strength =s;
-	}
-
-/*    character(int r)
-    {
-    race =r;
-
-    }
-void creat_other_feature(int r)
-    {
-        if(r==1)
+        character(int i)
         {
-            setattack(37);
-            setdefence(56);
-
-
-        }
-        if(r==2)
-        {
-
-
+            id = i;
         }
 
-    }
+        int getID()
+        {
+            return id;
+        }
+        string getrace()
+        {
+             return race;
+        }
 
-    void setattack(int a1)
+        int getchanceAttack()
+        {
+            return chanceAttack;
+        }
+
+        int getchanceDefense()
+        {
+            return chanceDefense;
+        }
+
+        int getCharAttack()
+        {
+            return CharAttack;
+        }
+
+        int getCharDefense()
+        {
+            return CharDefense;
+        }
+
+        int getStrength()
+        {
+            return strength;
+        }
+    int getbaseHealth()
+        {
+            return baseHealth;
+        }
+
+    void setrace(string r)
+        {
+             race = r;
+        }
+
+        void setchanceAttack(int cA)
+        {
+             chanceAttack = cA;
+        }
+
+        void setchanceDefense(int cD)
+        {
+            chanceDefense = cD;
+        }
+
+        void setCharAttack(int A)
+        {
+            CharAttack = A;
+        }
+
+        void setCharDefense(int D)
+        {
+            CharDefense = D;
+        }
+
+        void setStrength(int S)
+        {
+            strength = S;
+        }
+    void setbaseHealth(int H)
+        {
+            baseHealth = H;
+        }
+
+    void setUpCharacter(int i)
     {
-        chanceAttack = a1;
+        if(i==1){
+        setrace("Human");
+        setchanceAttack(66);
+        setchanceDefense(50);
+        setCharAttack(30);
+        setCharDefense(20);
+        setStrength(100);
+        setbaseHealth(60);
+        }
+        if(i==2){
+        setrace("Elf");
+        setchanceAttack(100);
+        setchanceDefense(25);
+        setCharAttack(40);
+        setCharDefense(10);
+        setStrength(70);
+        setbaseHealth(40);
+        }
+        if(i==3){
+        setrace("Dwarf");
+        setchanceAttack(66);
+        setchanceDefense(66);
+        setCharAttack(30);
+        setCharDefense(20);
+        setStrength(130);
+        setbaseHealth(50);
+        }
+        if(i==4){
+        setrace("Hobbit");
+        setchanceAttack(33);
+        setchanceDefense(66);
+        setCharAttack(25);
+        setCharDefense(20);
+        setStrength(85);
+        setbaseHealth(70);
+        }
+        if(i==5){
+        setrace("Orc");
+        setchanceAttack(25);
+        setchanceDefense(25);
+        setCharAttack(25);
+        setCharDefense(10);
+        setStrength(130);
+        setbaseHealth(50);
+        }
     }
-void setdefence(int a2)
-{
-
-    chanceDefence = a2;
-}*/
 
     //player attacks an enemy
     //enemies can't attack as they can't move
@@ -63,7 +149,8 @@ void setdefence(int a2)
     bool IsDead();
 
 private:
-    unsigned int race;
+    unsigned int id;
+    string race;
     //attack chance
     unsigned int chanceAttack;
     //defense chance

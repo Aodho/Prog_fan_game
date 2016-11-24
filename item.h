@@ -95,6 +95,11 @@ class item
         {
             name = n;
         }
+        void setID(int i)
+        {   
+            id = i;
+        }
+
 
         void setUpItem(int i)
         {
@@ -104,6 +109,7 @@ class item
                 setweight(10);
                 setStrength(0);
                 setType("Weapon");
+                setID(1);
             }
             else if(i==2){
                 setname("Dagger");
@@ -111,6 +117,7 @@ class item
                 setweight(5);
                 setStrength(0);
                 setType("Weapon");
+                setID(2);
             }
             else if(i==3){
                 setname("Plate Armour");
@@ -119,6 +126,7 @@ class item
                 setweight(40);
                 setStrength(0);
                 setType("Armour");
+                setID(3);
             }
             else if(i==4){
                 setname("Leather Armour");
@@ -126,6 +134,7 @@ class item
                 setweight(20);
                 setStrength(0);
                 setType("Armour");
+                setID(4);
             }
             else if(i==5){
                 setname("Large Shield");
@@ -134,6 +143,7 @@ class item
                 setweight(30);
                 setStrength(0);
                 setType("Shield");
+                setID(5);
             }
             else if(i==6){
                 setname("Small Shield");
@@ -141,6 +151,7 @@ class item
                 setweight(10);
                 setStrength(0);
                 setType("Shield");
+                setID(6);
             }
             else if(i==7){
                 setname("Ring of Life");
@@ -148,6 +159,7 @@ class item
                 setweight(1);
                 setStrength(0);
                 setType("Ring");
+                setID(7);
             }
             else if(i==8){
                 setname("Ring of Strength");
@@ -155,6 +167,7 @@ class item
                 setHealth(-10);
                 setweight(1);
                 setType("Ring");
+                setID(8);
             }
         }
     private:

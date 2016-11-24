@@ -10,7 +10,6 @@
 #include <string.h>
 #include <ctime>
 #include <vector>
-//vector<vector<int> > map;
 #include "board.h"
 #include "fanGame.h"
 #include "character.h"
@@ -43,7 +42,7 @@ int main()
         // read the move
         newFantasyGame.PrintBoard(Rows,Cols);
         cout << "Enter a move using (W=up,A=left,S=down,D=Right)\n";
-        cout << "Other actions(P=pick up item,I = check inventory,O = Drop Item):";
+        cout << "Other actions(P=pick up item, I = check inventory, O = Drop Item, Q = Quit Game):";
         cin >> move;
         move = toupper(move);
 
@@ -55,15 +54,15 @@ int main()
                GameOver = true;
             } else {
                 // Remove all dead Foes from game
-                newFantasyGame.RemoveDeadFoes();
+                newFantasyGame.RemoveDeadFoes(Rows,Cols);
                 // If all of the Foes are dead
-                if (newFantasyGame.AllFoesDead()) {
+                if (newFantasyGame.AllFoesDead(Rows,Cols)) {
                     cout << "Map Clear!" << endl;
                     GameOver = true;
                 }
             }
         }
-    } while (!GameOver);
+    } while (!GameOver && move != 'Q');
     return 0;
 
 	}

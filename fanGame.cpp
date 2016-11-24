@@ -12,13 +12,26 @@
 using namespace std;
 
 vector< vector<character*> > FantasyGame::CharacterLocation(10,vector<character*>(10));
-//initialise a matrix of character locations
+//initialise a matrix of character pointers showing locations
 vector< vector<item*> > FantasyGame::ItemLocation(10,vector<item*>(10));
-//initialise a matrix of item locations
+//initialise a matrix of item pointers showing locations
 vector<item> FantasyGame::inventory(0);
-//map<int,item> pickedUpItems;
+//A vecotr of inventory
+vector< vector<item> > FantasyGame::Items(10,vector<item>(10));
+
 
 FantasyGame::FantasyGame(int rows,int cols) {
+
+    int p = 0;
+    while(p<1 || p>5){
+    cout << "Please choose a race.\n" << "Select the corresponding number:\n" <<
+            "1 For HUMAN\n2 For ELF\n3 For DWARF\n4 For HOBBIT\n5 for Orc\n"  <<endl;
+    cin >> p;
+    }
+    cout << "Good Choice Young Padawan! You Have Chosen: " << p << endl;
+
+//////This has to go here in order to happen before the board is created////////
+
 	// Initlialize the random number generator
 	time_t qTime;
 	time(&qTime);
@@ -26,26 +39,20 @@ FantasyGame::FantasyGame(int rows,int cols) {
     //generate a new board
 	board newBoard(rows, cols);
     //used to resize the initialised matrix to the correct number of rows
+    ItemLocation.resize(rows);        
     CharacterLocation.resize(rows);
+    Items.resize(rows);
     for (int i = 0; i < rows; i++){
         //used to resize the initialised matrix to the correct number of colunms
         CharacterLocation[i].resize(cols);
-    }
-    ItemLocation.resize(rows);
-    for (int i = 0; i < rows; i++){
-        //used to resize the initialised matrix to the correct number of colunms
         ItemLocation[i].resize(cols);
+        Items[i].resize(cols);
     }
     // setting all values in the matrix to 0 as 0 is empty space
     for (unsigned int Row = 0; Row < 10; ++Row) {
         for (unsigned int Col = 0; Col < 10; ++Col) {
-            CharacterLocation[Row][Col]    = 0;
-        }
-    }
-    // setting all values in the matrix to 0 as 0 is empty space
-    for (unsigned int Row = 0; Row < 10; ++Row) {
-        for (unsigned int Col = 0; Col < 10; ++Col) {
-            ItemLocation[Row][Col]    = 0;
+            CharacterLocation[Row][Col] = 0;
+            ItemLocation[Row][Col] = 0;
         }
     }
     inventory.clear();
@@ -58,6 +65,7 @@ FantasyGame::FantasyGame(int rows,int cols) {
 			startPos = true;
             //setting up the player a point (1,1) in the matrix
 			CharacterLocation[Row][Col] = &Player;
+			Player.setUpCharacter(p);
 		}
 	}
 	// Create 10 Enemies
@@ -69,6 +77,7 @@ FantasyGame::FantasyGame(int rows,int cols) {
         //randomly generating 10 enemies needs to be updated
 		if (QueryLocation(Row, Col) == 0) {
 			CharacterLocation[Row][Col] = &Enemies[foe];
+			Enemies[foe - 6].setUpCharacter(1+(rand()%5));
 			++foe;
 			if (foe == 16) {
 				startPos2 = true;
@@ -77,16 +86,16 @@ FantasyGame::FantasyGame(int rows,int cols) {
 	}
 	//Create 10 Items
 	bool genItems = false;
-    unsigned int item = 17;
+    unsigned int item = 1;
     while (!genItems) {
         unsigned int Row = 2 + (rand() % (rows - 2));
         unsigned int Col = 2 + (rand() % (cols - 2));
         //randomly generating 10 items needs to be updated
         if (QueryLocation(Row, Col) == 0) {
-            ItemLocation[Row][Col] = &Items[item];
-            Items[item - 17].setUpItem(1+(rand()%8));
+            ItemLocation[Row][Col] = &Items[Row][Col];
+            Items[Row][Col].setUpItem(1+(rand()%8));
             ++item;
-            if (item == 27) {
+            if (item == 16) {
                 genItems = true;
             }
         }
@@ -102,8 +111,8 @@ int FantasyGame::QueryLocation(unsigned int Row, unsigned int Col) {
         }
     }
 	for (unsigned int j = 17; j < 27; ++j) {
-		if (ItemLocation[Row][Col] == &(Items[j])) {
-            return j;
+		if (ItemLocation[Row][Col] == &(Items[Row][Col])) {
+            return 2;
         }
 	}
     //if player location return 3
@@ -128,20 +137,23 @@ bool FantasyGame::LocateCharacter(unsigned int& rRow, unsigned int& cCol,charact
 	return false;
 }
 
-bool FantasyGame::checkItemType(unsigned int CurLoc){
+bool FantasyGame::checkItemType(unsigned int Row, unsigned int Col){
+    if (Items[Row][Col].getType() == "Ring"){
+        return true;
+    }
     for (int j = 0;j<inventory.size(); ++j){
-        if(inventory[j].getType() == Items[CurLoc - 17].getType()){
+        if(inventory[j].getType() == Items[Row][Col].getType()){
             return false;
         }
     }
     return true;
 }
-bool FantasyGame::checkInventorySpace(unsigned int CurLoc){
+bool FantasyGame::checkInventorySpace(unsigned int Row,unsigned int Col){
     unsigned int total = 0;
     for (int j = 0;j<inventory.size(); ++j){
         total = (total + inventory[j].getWeight());
     }
-    if ((total + Items[CurLoc - 17].getWeight())>Player.getStrength())
+    if ((total + Items[Row][Col].getWeight())>Player.getStrength())
     {
         return false;
     }
@@ -181,16 +193,16 @@ bool FantasyGame::MovePlayer(const char Movement) {
 			}
         case 'P':
             {
-                if (CurLoc >= 17 && CurLoc <= 27){
-                    if(checkItemType(CurLoc) == true){
-                        if(checkInventorySpace(CurLoc) == true){
-                        inventory.push_back(Items[CurLoc - 17]);
+                if (CurLoc == 2){
+                    if(checkItemType(PlayerRow,PlayerCol) == true){
+                        if(checkInventorySpace(PlayerRow,PlayerCol) == true){
+                        inventory.push_back(Items[PlayerRow][PlayerCol]);
                         ItemLocation[PlayerRow][PlayerCol] = 0;
                         }else{
                           cout << "Not Strong enough to carry any more items \n";
                         }
                     }else{
-                        cout << "Item of Type: " << Items[CurLoc - 17].getType() << " already present in inventory \n";
+                        cout << "Item of Type: " << Items[PlayerRow][PlayerCol].getType() << " already present in inventory \n";
                         return false;
                     }
                     return true;
@@ -210,14 +222,19 @@ bool FantasyGame::MovePlayer(const char Movement) {
 						unsigned int x;
                         cout << "Please enter Item number from inventory list";
 						cin >> x;
+                        ItemLocation[PlayerRow][PlayerCol] = &Items[PlayerRow][PlayerCol];
+                        Items[PlayerRow][PlayerCol].setUpItem(inventory[x].getID());
 						inventory.erase(inventory.begin() + x);
+                        return true;
                     }
                     else{
                         cout << "Unable to drop item as space is not free!";
+                        return false;
                     }
                 }
                 else{
                     cout << "Nothing Present in inventory";
+                    return false;
                 }
              break;
             }
@@ -249,7 +266,7 @@ bool FantasyGame::MovePlayer(const char Movement) {
 		CharacterLocation[PlayerRow][PlayerCol] = 0;
 		return true;
     //if an enemy player will attack that enemy
-	}else if (NextLoc >= 17 && NextLoc <= 27){ 
+	}else if (NextLoc == 2){ 
 		CharacterLocation[NextRow][NextCol] = &Player;
 		CharacterLocation[PlayerRow][PlayerCol] = 0;
 		return true;
@@ -266,7 +283,7 @@ bool FantasyGame::PlayerIsDead() {
 	return Player.IsDead();
 }
 //removes dead enemies
-void FantasyGame::RemoveDeadFoes() {
+void FantasyGame::RemoveDeadFoes(unsigned int Row, unsigned int Col) {
 	for (unsigned int i = 6; i < 16; ++i) {
 		if (Enemies[i].IsDead()) {
 			unsigned int Row;
@@ -279,7 +296,7 @@ void FantasyGame::RemoveDeadFoes() {
 	}
 }
 //checks wether all foes are dead if so gameover
-bool FantasyGame::AllFoesDead() {
+bool FantasyGame::AllFoesDead(unsigned int Row, unsigned int Col) {
 	bool AllDead = true;
 	for (unsigned int i = 6; i < 16; ++i) {
 		if (!Enemies[i].IsDead()) {
@@ -298,7 +315,7 @@ for (int down = 0; down < Rows; down++) {
 			case 0:  // Nothing
 				cout << " ";
 			break;
-			case 17 ... 27:  // item
+			case 2:  // item
 				cout << "$";
 			break;
 			case 6 ... 16: //Enemy

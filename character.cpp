@@ -5,6 +5,7 @@
 #include <ctime>
 #include <vector>
 #include "character.h"
+#include "fanGame.h"
 using namespace std;
 
 //character class used to generate characters

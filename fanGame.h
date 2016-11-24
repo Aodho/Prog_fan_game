@@ -33,13 +33,12 @@ public:
     //check if the player is alive if not end game
     bool PlayerIsDead();
     //remove dead enemies from the board
-    void RemoveDeadFoes();
+    void RemoveDeadFoes(unsigned int Row, unsigned int Col);
     //end game if all foes dead
-    bool AllFoesDead();
+    bool AllFoesDead(unsigned int Row, unsigned int Col);
     static vector<item> inventory;
-    bool checkItemType(unsigned int x);
-    bool checkInventorySpace(unsigned int CurLoc);
-
+    bool checkItemType(unsigned int Row, unsigned int Col);
+    bool checkInventorySpace(unsigned int Row, unsigned int Col);
 
 private:
     //locate a character
@@ -51,14 +50,10 @@ private:
     // create a player character
     character Player;
     //create enemy characters
-    character Enemies[20];
-    //charcter temp = character(1);
-    //Enemies[0]= temp;
-
-    // should use two d arrys to store both above and below
+    character Enemies[50];
+    //static std::vector<std::vector<character> > Enemies;
     //create items
-    item Items[20];
-
+    static std::vector<std::vector<item> > Items;
     //create a matrix of character locations
     static vector<vector<character*> > CharacterLocation;
     //create a matrix of item locations
