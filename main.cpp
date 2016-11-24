@@ -45,7 +45,7 @@ int main()
         // read the move
         newFantasyGame.PrintBoard(Rows,Cols);
         cout << "\n\nEnter a move using (W=up,A=left,S=down,D=Right)\n";
-        cout << "Other actions(P=pick up item, I = check inventory, O = Drop Item, Q = Quit Game):";
+        cout << "Other actions(P=pick up item,L = Look Around, I = check inventory, O = Drop Item, Q = Quit Game):";
         cin >> move;
         move = toupper(move);
 
