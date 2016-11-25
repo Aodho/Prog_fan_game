@@ -98,10 +98,11 @@ public:
 /*setUpCharacter(int i)
  * Setting up the different character races
  * Uses setter methods to set the value of each race
+ * int i will be used as ID to process the users choice of race at the beginning of the game.
  */
     void setUpCharacter(int i)
     {
-        if(i==1){
+        if(i==1){ 
         setrace("Human");
         setchanceAttack(66);
         setchanceDefense(50);
@@ -150,6 +151,7 @@ public:
 
     //player attacks an enemy
     //enemies can't attack as they can't move
+    //bool night is used to apply the Orc Characteristics which change depending on night/day.
     void Attack(character& enemy, bool night);
     //check if character is dead
     bool IsDead();

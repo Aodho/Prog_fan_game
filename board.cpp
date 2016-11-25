@@ -14,7 +14,6 @@
 #include "board.h"
 using namespace std;
 
-//vector< vector<int> > map;
 //used to initialise a blank empty 10x10 matrix
 vector< vector<int> > board::map(10,vector<int>(10));
 /*board(int Rows, int Cols)

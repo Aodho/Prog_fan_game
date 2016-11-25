@@ -38,28 +38,27 @@ public:
     bool AllFoesDead(unsigned int Row, unsigned int Col);
     //Inventory of items
     static vector<item> inventory;
-
+    //A list of the Orcson the board
     static vector<character*> orcs;
-
     //Function to check the type of the item
     bool checkItemType(unsigned int Row, unsigned int Col);
     //Function to check the strength of the character
     bool checkInventorySpace(unsigned int Row, unsigned int Col);
-
+    //Function used to create Items on the board
     void setUpItems(unsigned int Row, unsigned int Col);
-
+    //Function used to remove items from the board whe nthey are picked up
     void removeItems(unsigned int Row, unsigned int Col);
-
+    //Function used to look at the tiles adjecent to the player and the current player tile
     void lookAround(unsigned int Row,unsigned int Col);
-
+    //Function used to show the current inventory the player is holding
     void showInventory();
-
+    //Used to allow the player to pick up an item and place it into their inventory
     bool pickUpItem(int CurLoc, int Row, int Col);
-
+    //Used to allow the player to drop items back onto the board
     bool dropItem(int CurLoc, int Row, int Col);
-
+    //Used to swap between night and day
     void NightDay();
-
+    //Used to both get and set night
     bool getNight()
        {
          return night;
@@ -73,14 +72,13 @@ public:
 private:
     //locate a character
     bool LocateCharacter(unsigned int& rRow, unsigned int& cCol,unsigned int Rows,unsigned int Cols, character* xyCharacter);
+    //True or false value for wether it is night or day
     bool night;
-
-    //createa new board
+    //create a new board
     board newBoard(int rows, int cols);
     // create a player character
     character Player;
     //create enemy characters
-    //character Enemies[50];
     static std::vector<std::vector<character> > Enemies;
     //create items
     static std::vector<std::vector<item> > Items;

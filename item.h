@@ -15,7 +15,10 @@ class item
 {
     public:
         item();
-
+/*A series of getter and setter methods for 
+ * a variety of attributes including:
+ * ID,weight,Attack,Defence,name,type,Strength and health
+ */
         item(int i)
         {
             id = i;
@@ -103,6 +106,11 @@ class item
 
         void setUpItem(int i)
         {
+/*setUpItem(int i)
+ * Setting up the different Items
+ * Uses setter methods to set the value of each type
+ * int i will be used as ID to process deployment of items at the beginning of the game.
+ */
             if(i==1){
                 setname("Sword");
                 setAttack(10);
@@ -171,13 +179,21 @@ class item
             }
         }
     private:
+        //Item ID
         unsigned int id;
+        //Item Name
         string name;
+        //Wieght of Item
         unsigned int weight;
+        //Item strenght modifier
 		unsigned int strength;
+        //Item health modifier int rather than unsigned int as can be negative
         int health;
+        //Item Attack modifier int rather than unisgned int as can be negative
         int attack;
+        //Item type
         string type;
+        //Item defense modifier
         unsigned int defense;
 };
 
